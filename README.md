@@ -32,9 +32,21 @@ terraform {
   }
   required_version = ">= 1.5"
 }
+
+provider "mainlayer" {
+  # Credentials configured via MAINLAYER_API_KEY environment variable
+}
 ```
 
 Run `terraform init` to download the provider.
+
+### Building from Source
+
+```bash
+git clone https://github.com/mainlayer/terraform-provider-mainlayer.git
+cd terraform-provider-mainlayer
+go build -o ./bin/terraform-provider-mainlayer
+```
 
 ---
 
@@ -57,6 +69,15 @@ provider "mainlayer" {
 export MAINLAYER_API_KEY="ml_live_..."
 terraform plan
 ```
+
+---
+
+## Resources Overview
+
+The provider supports three main resource types:
+- **`mainlayer_resource`** — Monetised endpoints, tools, models, datasets
+- **`mainlayer_plan`** — Subscription tiers and pricing models
+- **`mainlayer_vendor`** — Vendor account registration and management
 
 ---
 
@@ -152,6 +173,44 @@ Import an existing plan using the `<resource_id>/<plan_id>` format:
 ```bash
 terraform import mainlayer_plan.starter res_abc123/plan_xyz456
 ```
+
+### `mainlayer_vendor`
+
+Register a new vendor account or update vendor settings on the Mainlayer platform.
+
+#### Example
+
+```hcl
+resource "mainlayer_vendor" "my_vendor" {
+  name     = "Acme AI"
+  email    = "support@acmeai.com"
+  website  = "https://acmeai.com"
+  country  = "US"
+}
+
+output "vendor_id" {
+  value = mainlayer_vendor.my_vendor.id
+}
+```
+
+#### Argument Reference
+
+| Argument     | Type   | Required | Description |
+|--------------|--------|----------|-------------|
+| `name`       | string | yes      | Company or vendor name. |
+| `email`      | string | yes      | Email address for communications and invoice receipts. |
+| `website`    | string | no       | Company website URL. |
+| `country`    | string | no       | ISO 3166-1 alpha-2 country code (e.g., `US`, `FR`, `GB`). |
+| `description`| string | no       | Description of products or services offered. |
+
+#### Attributes Reference
+
+| Attribute    | Description |
+|--------------|-------------|
+| `id`         | Unique vendor ID assigned by Mainlayer (prefixed `vnd_`). |
+| `api_key`    | Initial API key generated for the vendor. |
+| `created_at` | RFC3339 timestamp of vendor creation. |
+| `updated_at` | RFC3339 timestamp of last update. |
 
 ---
 

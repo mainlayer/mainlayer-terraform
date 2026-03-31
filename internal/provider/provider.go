@@ -103,6 +103,7 @@ func (p *MainlayerProvider) Resources(_ context.Context) []func() resource.Resou
 	return []func() resource.Resource{
 		NewResourceResource,
 		NewPlanResource,
+		NewVendorResource,
 	}
 }
 

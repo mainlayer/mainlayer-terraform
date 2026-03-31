@@ -73,6 +73,19 @@ type Plan struct {
 	UpdatedAt   string  `json:"updated_at,omitempty"`
 }
 
+// Vendor represents a Mainlayer vendor account.
+type Vendor struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	Website     string `json:"website,omitempty"`
+	Country     string `json:"country,omitempty"`
+	Description string `json:"description,omitempty"`
+	APIKey      string `json:"api_key,omitempty"`
+	CreatedAt   string `json:"created_at,omitempty"`
+	UpdatedAt   string `json:"updated_at,omitempty"`
+}
+
 // ListResourcesResponse holds the paginated list of resources.
 type ListResourcesResponse struct {
 	Resources []Resource `json:"resources"`
@@ -293,6 +306,87 @@ func (c *Client) UpdatePlan(ctx context.Context, resourceID, planID string, p *P
 func (c *Client) DeletePlan(ctx context.Context, resourceID, planID string) error {
 	path := fmt.Sprintf("/v1/resources/%s/plans/%s", resourceID, planID)
 	resp, err := c.doRequest(ctx, http.MethodDelete, path, nil)
+	if err != nil {
+		return err
+	}
+	data, err := readAndClose(resp)
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode == http.StatusNotFound {
+		return nil
+	}
+	return checkStatus(resp, data)
+}
+
+// --- Vendor CRUD ---
+
+// CreateVendor creates a new vendor via the API.
+func (c *Client) CreateVendor(ctx context.Context, v *Vendor) (*Vendor, error) {
+	resp, err := c.doRequest(ctx, http.MethodPost, "/v1/vendors", v)
+	if err != nil {
+		return nil, err
+	}
+	data, err := readAndClose(resp)
+	if err != nil {
+		return nil, err
+	}
+	if err := checkStatus(resp, data); err != nil {
+		return nil, err
+	}
+	var created Vendor
+	if err := json.Unmarshal(data, &created); err != nil {
+		return nil, fmt.Errorf("decoding create vendor response: %w", err)
+	}
+	return &created, nil
+}
+
+// GetVendor retrieves a vendor by ID.
+func (c *Client) GetVendor(ctx context.Context, id string) (*Vendor, error) {
+	resp, err := c.doRequest(ctx, http.MethodGet, "/v1/vendors/"+id, nil)
+	if err != nil {
+		return nil, err
+	}
+	data, err := readAndClose(resp)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil
+	}
+	if err := checkStatus(resp, data); err != nil {
+		return nil, err
+	}
+	var vendor Vendor
+	if err := json.Unmarshal(data, &vendor); err != nil {
+		return nil, fmt.Errorf("decoding get vendor response: %w", err)
+	}
+	return &vendor, nil
+}
+
+// UpdateVendor updates a vendor by ID.
+func (c *Client) UpdateVendor(ctx context.Context, id string, v *Vendor) (*Vendor, error) {
+	resp, err := c.doRequest(ctx, http.MethodPut, "/v1/vendors/"+id, v)
+	if err != nil {
+		return nil, err
+	}
+	data, err := readAndClose(resp)
+	if err != nil {
+		return nil, err
+	}
+	if err := checkStatus(resp, data); err != nil {
+		return nil, err
+	}
+	var updated Vendor
+	if err := json.Unmarshal(data, &updated); err != nil {
+		return nil, fmt.Errorf("decoding update vendor response: %w", err)
+	}
+	return &updated, nil
+}
+
+// DeleteVendor deletes a vendor by ID.
+func (c *Client) DeleteVendor(ctx context.Context, id string) error {
+	resp, err := c.doRequest(ctx, http.MethodDelete, "/v1/vendors/"+id, nil)
 	if err != nil {
 		return err
 	}
