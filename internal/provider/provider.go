@@ -54,7 +54,7 @@ func (p *MainlayerProvider) Schema(_ context.Context, _ provider.SchemaRequest, 
 				Sensitive: true,
 			},
 			"base_url": schema.StringAttribute{
-				MarkdownDescription: "Override the Mainlayer API base URL. Defaults to `https://api.mainlayer.xyz`. " +
+				MarkdownDescription: "Override the Mainlayer API base URL. Defaults to `https://api.mainlayer.fr`. " +
 					"Can also be set via the `MAINLAYER_BASE_URL` environment variable.",
 				Optional: true,
 			},

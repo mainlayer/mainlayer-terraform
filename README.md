@@ -1,6 +1,6 @@
 # Terraform Provider for Mainlayer
 
-Manage [Mainlayer](https://mainlayer.xyz) resources and plans as infrastructure code.
+Manage [Mainlayer](https://mainlayer.fr) resources and plans as infrastructure code.
 Mainlayer is the payments and monetisation layer for AI agents — create monetised API
 endpoints, define subscription plans, and control billing models without writing payment
 logic yourself.
@@ -49,7 +49,7 @@ provider "mainlayer" {
 | Attribute  | Type   | Required | Description |
 |------------|--------|----------|-------------|
 | `api_key`  | string | yes      | Your Mainlayer API key. Can also be set via the `MAINLAYER_API_KEY` environment variable. |
-| `base_url` | string | no       | Override the API base URL. Defaults to `https://api.mainlayer.xyz`. Useful for testing. |
+| `base_url` | string | no       | Override the API base URL. Defaults to `https://api.mainlayer.fr`. Useful for testing. |
 
 **Recommended**: store your API key as a secret and pass it via an environment variable:
 

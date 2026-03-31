@@ -74,7 +74,7 @@ The provider requires a Mainlayer API key. You can set it in three ways:
 | Argument | Type | Required | Description |
 |----------|------|----------|-------------|
 | `api_key` | string | yes* | Mainlayer API key. *Can be set via `MAINLAYER_API_KEY` env var instead. |
-| `base_url` | string | no | Override the API base URL. Default: `https://api.mainlayer.xyz` |
+| `base_url` | string | no | Override the API base URL. Default: `https://api.mainlayer.fr` |
 
 ### Resources
 

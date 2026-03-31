@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://api.mainlayer.xyz"
+	defaultBaseURL = "https://api.mainlayer.fr"
 	defaultTimeout = 30 * time.Second
 	userAgent      = "terraform-provider-mainlayer/1.0"
 )
